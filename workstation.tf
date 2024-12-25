@@ -2,12 +2,12 @@ module "ec2_instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
 
   name = "workstation"
-  ami = data.aws_ami.centos8.id
+  ami = data.aws_ami.rhel_info.id
   instance_type          = "t2.micro"
   #key_name               = "user1"
   #monitoring             = true
   vpc_security_group_ids = [aws_security_group.allow_minikube.id]
-  subnet_id              = "subnet-0ea509ad4cba242d7" #replace your default subnet id
+  subnet_id              = "subnet-0499ec8682d939e91" #replace your default subnet id
   user_data = file("docker.sh")
   tags = {
     Terraform   = "true"
@@ -38,19 +38,20 @@ resource "aws_security_group" "allow_minikube" {
   }
 }
 
-data "aws_ami" "centos8"{
-    owners = ["973714476881"]
-    most_recent      = true
+data "aws_ami" "rhel_info" {
 
-    filter {
-        name   = "name"
-        values = ["Centos-8-DevOps-Practice"]
-    }
-
-    filter {
-        name   = "root-device-type"
-        values = ["ebs"]
-    }
+	most_recent      = true
+	owners = ["973714476881"]
+	
+	filter {
+		name   = "name"
+		values = ["RHEL-9-DevOps-Practice"]
+	}
+	
+	filter {
+		name   = "root-device-type"
+		values = ["ebs"]
+	}
 
     filter {
         name   = "virtualization-type"
